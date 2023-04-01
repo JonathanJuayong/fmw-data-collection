@@ -7,7 +7,7 @@ interface LayoutProps {
 
 export default function Layout({children}: LayoutProps) {
     return (
-        <Container size="sm">
+        <Container size="sm" sx={{paddingBlock: "4em"}}>
             {children}
         </Container>
     )
