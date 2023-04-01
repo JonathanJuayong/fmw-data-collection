@@ -1,11 +1,13 @@
 import {Box, createStyles, Group, Input, NumberInput, PinInput, Radio, Select, Stack, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {IMaskInput} from "react-imask";
 
 const useStyles = createStyles((theme) => ({
     box: {
         backgroundColor: theme.colors.gray[0],
         minHeight: "100svh",
-        padding: "2em"
+        padding: "2em",
+        paddingBlock: "4em"
     }
 }))
 
@@ -87,6 +89,7 @@ function CustomerDetails() {
             </Group>
             <TextInput
                 label="Address"
+                withAsterisk
             />
             <Group position="apart">
                 <Select
@@ -123,6 +126,91 @@ function CustomerDetails() {
                 parser={parserFunction}
                 precision={2}
             />
+            <Radio.Group
+                name=""
+                label="Are you thinking of another property for rental or owner occupied or renovating?"
+            >
+                <Group>
+                    <Radio value="yes" label="Yes"/>
+                    <Radio value="no" label="No"/>
+                </Group>
+            </Radio.Group>
+            <Radio.Group
+                name=""
+                label="Are you thinking of another property for rental or owner occupied or renovating?"
+            >
+                <Group>
+                    <Radio value="yes" label="Yes"/>
+                    <Radio value="no" label="No"/>
+                </Group>
+            </Radio.Group>
+            <Radio.Group
+                name=""
+                label="Is your interest rate the best available?"
+            >
+                <Group>
+                    <Radio value="yes" label="Yes"/>
+                    <Radio value="no" label="No"/>
+                </Group>
+            </Radio.Group>
+            <Radio.Group
+                name=""
+                label="Have you considered fixing your loan?"
+            >
+                <Group>
+                    <Radio value="yes" label="Yes"/>
+                    <Radio value="no" label="No"/>
+                </Group>
+            </Radio.Group>
+            <Radio.Group
+                name=""
+                label="Are you sure your loan structure is correct and you are claiming the maximum interest deductions?"
+            >
+                <Group>
+                    <Radio value="yes" label="Yes"/>
+                    <Radio value="no" label="No"/>
+                </Group>
+            </Radio.Group>
+            <Radio.Group
+                name=""
+                label="Would you like our Mortgage Consultant to contact you for a FREE review of your loans"
+            >
+                <Group>
+                    <Radio value="yes" label="Yes"/>
+                    <Radio value="no" label="No"/>
+                </Group>
+            </Radio.Group>
+            <TextInput
+                label="Address [Postal]"
+                withAsterisk
+            />
+            <Group position="apart">
+                <Select
+                    data={states}
+                    label="State"
+                    withAsterisk
+                />
+                <NumberInput
+                    label="Post Code"
+                    withAsterisk
+                    hideControls
+                />
+            </Group>
+            <Input.Wrapper
+                label="Mobile Number"
+            >
+                <Input<any>
+                    component={IMaskInput}
+                    mask="+61 (000) 000 000"
+                />
+            </Input.Wrapper>
+            <Input.Wrapper
+                label="Email Address"
+            >
+                <Input
+                    type="email"
+                />
+            </Input.Wrapper>
         </Stack>
     )
 }
