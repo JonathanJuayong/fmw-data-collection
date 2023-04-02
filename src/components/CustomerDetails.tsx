@@ -1,9 +1,28 @@
-import {Group, Input, NumberInput, PinInput, Radio, Select, Stack, TextInput} from "@mantine/core";
+import {
+    Box,
+    Button,
+    Flex,
+    Group,
+    Input,
+    NativeSelect,
+    NumberInput,
+    PinInput,
+    Radio,
+    Select,
+    Stack,
+    Text,
+    TextInput
+} from "@mantine/core";
 import {IMaskInput} from "react-imask";
-import {FieldValues, useForm} from "react-hook-form";
+import {Controller, FieldValues, useForm} from "react-hook-form";
 import React from "react";
 import MySelect from "./MySelect";
 import MyTextInput from "./MyTextInput";
+import MyDatePicker from "./MyDatePicker";
+import CustomTitle from "./CustomTitle";
+import YesOrNoRadio from "./YesOrNoRadio";
+import HiddenComponent from "./HiddenComponent";
+import MyNumberInput from "./MyNumberInput";
 
 const customerInfo = {
     title: "select",
@@ -59,186 +78,210 @@ const initialValues = {
 
 
 export default function CustomerDetails() {
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit, control, unregister, watch} = useForm()
     const onSubmit = (value: FieldValues) => console.log(value)
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack>
-                <MySelect
-                    data={titles}
-                    label="Title"
-                    name="title"
-                    register={register}
-                />
-                <MyTextInput
-                    label="Surname"
-                    name="surname"
-                    register={register}
-                    required
-                />
-                <MyTextInput
-                    label="First Name"
-                    name="firstName"
-                    register={register}
-                    required
-                />
-                <MyTextInput
-                    label="Middle Name[s]"
-                    name="middleName"
-                    register={register}
-                />
-                <Input.Wrapper
-                    label="Date of Birth"
-                    withAsterisk
-                >
-                    <Input
-                        component="input"
-                        type="date"
-                        {...register("dateOfBirth")}
+        <>
+            <Box sx={{
+                position: "fixed",
+                left: "4em",
+                top: "4em"
+            }}>
+                <Button onClick={handleSubmit(onSubmit)}>TEST</Button>
+            </Box>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Stack>
+                    <Group>
+                        <MySelect
+                            data={titles}
+                            label="Title"
+                            name="title"
+                            required
+                            register={register}
+                        />
+                        <HiddenComponent condition={watch("title") === "other"}>
+                            <CustomTitle register={register} unregister={unregister}/>
+                        </HiddenComponent>
+                    </Group>
+                    <MyTextInput
+                        label="Surname"
+                        name="surname"
+                        register={register}
+                        required
                     />
-                </Input.Wrapper>
-                <Group position="left">
-                    <Input.Wrapper
-                        label="Tax File Number"
-                        withAsterisk
+                    <MyTextInput
+                        label="First Name"
+                        name="firstName"
+                        register={register}
+                        required
+                    />
+                    <MyTextInput
+                        label="Middle Name[s]"
+                        name="middleName"
+                        register={register}
+                    />
+                    <MyDatePicker label="Date of Birth" required name="dateOfBirth" register={register}/>
+                    <Flex justify="space-between" align="flex-end">
+                        <Controller
+                            name="taxFileNumber"
+                            control={control}
+                            render={({field}) => (
+                                <Input.Wrapper
+                                    label="Tax File Number"
+                                    withAsterisk
+                                >
+                                    <PinInput
+                                        length={9}
+                                        type="number"
+                                        aria-label="tax file number"
+                                        {...field}
+                                    />
+                                </Input.Wrapper>
+                            )}
+                        />
+                        {/*<Button>Reset Tin</Button>*/}
+                    </Flex>
+                    <MyTextInput
+                        label="Address"
+                        name="address"
+                        required
+                        register={register}
+                    />
+                    <Group position="apart">
+                        <NativeSelect
+                            data={states}
+                            label="State"
+                            withAsterisk
+                            {...register("state", {required: true})}
+                        />
+                        <Controller
+                            name="postCode"
+                            control={control}
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <NumberInput
+                                    label="Post Code"
+                                    withAsterisk
+                                    hideControls
+                                    {...field}
+                                />
+                            )}
+                        />
+                    </Group>
+                    <YesOrNoRadio name="ownProperty" label="Do you own this property" control={control}/>
+                    <HiddenComponent condition={watch("ownProperty") === "yes"}>
+                        <Flex justify="space-between">
+                            <Text>If so:</Text>
+                            <MyNumberInput
+                                name="marketValue"
+                                control={control}
+                                label="Market Value"
+                                defaultValue={0}
+                                formatter={formatterFunction}
+                                parser={parserFunction}
+                                precision={2}
+                                required
+                            />
+                            <MyNumberInput
+                                name="loan"
+                                control={control}
+                                label="Loan"
+                                defaultValue={0}
+                                formatter={formatterFunction}
+                                parser={parserFunction}
+                                precision={2}
+                                required
+                            />
+                        </Flex>
+                    </HiddenComponent>
+                    <Radio.Group
+                        name=""
+                        label="Are you thinking of another property for rental or owner occupied or renovating?"
                     >
-                        <PinInput
-                            length={9}
-                            type="number"
-                            aria-label="tax file number"
+                        <Group>
+                            <Radio value="yes" label="Yes"/>
+                            <Radio value="no" label="No"/>
+                        </Group>
+                    </Radio.Group>
+                    <Radio.Group
+                        name=""
+                        label="Are you thinking of another property for rental or owner occupied or renovating?"
+                    >
+                        <Group>
+                            <Radio value="yes" label="Yes"/>
+                            <Radio value="no" label="No"/>
+                        </Group>
+                    </Radio.Group>
+                    <Radio.Group
+                        name=""
+                        label="Is your interest rate the best available?"
+                    >
+                        <Group>
+                            <Radio value="yes" label="Yes"/>
+                            <Radio value="no" label="No"/>
+                        </Group>
+                    </Radio.Group>
+                    <Radio.Group
+                        name=""
+                        label="Have you considered fixing your loan?"
+                    >
+                        <Group>
+                            <Radio value="yes" label="Yes"/>
+                            <Radio value="no" label="No"/>
+                        </Group>
+                    </Radio.Group>
+                    <Radio.Group
+                        name=""
+                        label="Are you sure your loan structure is correct and you are claiming the maximum interest deductions?"
+                    >
+                        <Group>
+                            <Radio value="yes" label="Yes"/>
+                            <Radio value="no" label="No"/>
+                        </Group>
+                    </Radio.Group>
+                    <Radio.Group
+                        name=""
+                        label="Would you like our Mortgage Consultant to contact you for a FREE review of your loans"
+                    >
+                        <Group>
+                            <Radio value="yes" label="Yes"/>
+                            <Radio value="no" label="No"/>
+                        </Group>
+                    </Radio.Group>
+                    <TextInput
+                        label="Address [Postal]"
+                        withAsterisk
+                    />
+                    <Group position="apart">
+                        <Select
+                            data={states}
+                            label="State"
+                            withAsterisk
+                        />
+                        <NumberInput
+                            label="Post Code"
+                            withAsterisk
+                            hideControls
+                        />
+                    </Group>
+                    <Input.Wrapper
+                        label="Mobile Number"
+                    >
+                        <Input<any>
+                            component={IMaskInput}
+                            mask="+61 (000) 000 000"
                         />
                     </Input.Wrapper>
-                </Group>
-                <TextInput
-                    label="Address"
-                    withAsterisk
-                />
-                <Group position="apart">
-                    <Select
-                        data={states}
-                        label="State"
-                        withAsterisk
-                    />
-                    <NumberInput
-                        label="Post Code"
-                        withAsterisk
-                        hideControls
-                    />
-                </Group>
-                <Radio.Group
-                    name=""
-                    label="Do you own this property?"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <NumberInput
-                    label="Market Value"
-                    defaultValue={0}
-                    formatter={formatterFunction}
-                    parser={parserFunction}
-                    precision={2}
-                />
-                <NumberInput
-                    label="Loan"
-                    defaultValue={0}
-                    formatter={formatterFunction}
-                    parser={parserFunction}
-                    precision={2}
-                />
-                <Radio.Group
-                    name=""
-                    label="Are you thinking of another property for rental or owner occupied or renovating?"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <Radio.Group
-                    name=""
-                    label="Are you thinking of another property for rental or owner occupied or renovating?"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <Radio.Group
-                    name=""
-                    label="Is your interest rate the best available?"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <Radio.Group
-                    name=""
-                    label="Have you considered fixing your loan?"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <Radio.Group
-                    name=""
-                    label="Are you sure your loan structure is correct and you are claiming the maximum interest deductions?"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <Radio.Group
-                    name=""
-                    label="Would you like our Mortgage Consultant to contact you for a FREE review of your loans"
-                >
-                    <Group>
-                        <Radio value="yes" label="Yes"/>
-                        <Radio value="no" label="No"/>
-                    </Group>
-                </Radio.Group>
-                <TextInput
-                    label="Address [Postal]"
-                    withAsterisk
-                />
-                <Group position="apart">
-                    <Select
-                        data={states}
-                        label="State"
-                        withAsterisk
-                    />
-                    <NumberInput
-                        label="Post Code"
-                        withAsterisk
-                        hideControls
-                    />
-                </Group>
-                <Input.Wrapper
-                    label="Mobile Number"
-                >
-                    <Input<any>
-                        component={IMaskInput}
-                        mask="+61 (000) 000 000"
-                    />
-                </Input.Wrapper>
-                <Input.Wrapper
-                    label="Email Address"
-                >
-                    <Input
-                        type="email"
-                    />
-                </Input.Wrapper>
-            </Stack>
-            <input
-                type="submit"
-                value="submit form"
-            />
-        </form>
+                    <Input.Wrapper
+                        label="Email Address"
+                    >
+                        <Input
+                            type="email"
+                        />
+                    </Input.Wrapper>
+                </Stack>
+            </form>
+        </>
     )
 }
