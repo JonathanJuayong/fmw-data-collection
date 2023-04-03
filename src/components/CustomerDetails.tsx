@@ -1,18 +1,4 @@
-import {
-    Box,
-    Button,
-    Flex,
-    Group,
-    Input,
-    NativeSelect,
-    NumberInput,
-    PinInput,
-    Radio,
-    Select,
-    Stack,
-    Text,
-    TextInput
-} from "@mantine/core";
+import {Box, Button, Flex, Group, Input, NativeSelect, NumberInput, PinInput, Stack, Text} from "@mantine/core";
 import {IMaskInput} from "react-imask";
 import {Controller, FieldValues, useForm} from "react-hook-form";
 import MySelect from "./MySelect";
@@ -194,91 +180,89 @@ export default function CustomerDetails() {
                             />
                         </Flex>
                     </HiddenComponent>
-                    <Radio.Group
-                        name=""
+                    <YesOrNoRadio
+                        name="anotherProperty"
                         label="Are you thinking of another property for rental or owner occupied or renovating?"
-                    >
-                        <Group>
-                            <Radio value="yes" label="Yes"/>
-                            <Radio value="no" label="No"/>
-                        </Group>
-                    </Radio.Group>
-                    <Radio.Group
-                        name=""
-                        label="Are you thinking of another property for rental or owner occupied or renovating?"
-                    >
-                        <Group>
-                            <Radio value="yes" label="Yes"/>
-                            <Radio value="no" label="No"/>
-                        </Group>
-                    </Radio.Group>
-                    <Radio.Group
-                        name=""
+                        control={control}
+                    />
+                    <YesOrNoRadio
+                        name="bestInterest"
                         label="Is your interest rate the best available?"
-                    >
-                        <Group>
-                            <Radio value="yes" label="Yes"/>
-                            <Radio value="no" label="No"/>
-                        </Group>
-                    </Radio.Group>
-                    <Radio.Group
-                        name=""
+                        control={control}
+                    />
+                    <YesOrNoRadio
+                        name="loanFix"
                         label="Have you considered fixing your loan?"
-                    >
-                        <Group>
-                            <Radio value="yes" label="Yes"/>
-                            <Radio value="no" label="No"/>
-                        </Group>
-                    </Radio.Group>
-                    <Radio.Group
-                        name=""
+                        control={control}
+                    />
+                    <YesOrNoRadio
+                        name="correctLoanStructure"
                         label="Are you sure your loan structure is correct and you are claiming the maximum interest deductions?"
-                    >
-                        <Group>
-                            <Radio value="yes" label="Yes"/>
-                            <Radio value="no" label="No"/>
-                        </Group>
-                    </Radio.Group>
-                    <Radio.Group
-                        name=""
+                        control={control}
+                    />
+                    <YesOrNoRadio
+                        name="freeLoanReview"
                         label="Would you like our Mortgage Consultant to contact you for a FREE review of your loans"
-                    >
-                        <Group>
-                            <Radio value="yes" label="Yes"/>
-                            <Radio value="no" label="No"/>
-                        </Group>
-                    </Radio.Group>
-                    <TextInput
+                        control={control}
+                    />
+                    <MyTextInput
                         label="Address [Postal]"
-                        withAsterisk
+                        name="postalAddress"
+                        register={register}
+                        required
                     />
                     <Group position="apart">
-                        <Select
+                        <NativeSelect
                             data={states}
                             label="State"
                             withAsterisk
+                            {...register("postalState")}
                         />
-                        <NumberInput
-                            label="Post Code"
-                            withAsterisk
-                            hideControls
+                        <Controller
+                            name="postalPostCode"
+                            control={control}
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <NumberInput
+                                    label="Post Code"
+                                    withAsterisk
+                                    hideControls
+                                    {...field}
+                                />
+                            )}
                         />
                     </Group>
-                    <Input.Wrapper
-                        label="Mobile Number"
-                    >
-                        <Input<any>
-                            component={IMaskInput}
-                            mask="+61 (000) 000 000"
-                        />
-                    </Input.Wrapper>
-                    <Input.Wrapper
-                        label="Email Address"
-                    >
-                        <Input
-                            type="email"
-                        />
-                    </Input.Wrapper>
+                    <Controller
+                        control={control}
+                        name="mobileNumber"
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <Input.Wrapper
+                                label="Mobile Number"
+                            >
+                                <Input<any>
+                                    component={IMaskInput}
+                                    mask="+61 (000) 000 000"
+                                    {...field}
+                                />
+                            </Input.Wrapper>
+                        )}
+                    />
+                    <Controller
+                        control={control}
+                        name="email"
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <Input.Wrapper
+                                label="Email Address"
+                            >
+                                <Input
+                                    type="email"
+                                    {...field}
+                                />
+                            </Input.Wrapper>
+                        )}
+                    />
                 </Stack>
             </form>
         </>
