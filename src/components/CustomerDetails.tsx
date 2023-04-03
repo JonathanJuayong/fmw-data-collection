@@ -9,19 +9,6 @@ import YesOrNoRadio from "./YesOrNoRadio";
 import HiddenComponent from "./HiddenComponent";
 import MyNumberInput from "./MyNumberInput";
 
-const customerInfo = {
-    title: "select",
-    surname: "text input",
-    middleNames: "text input",
-    dob: "bday input",
-    tfn: "number input",
-    address: {
-        line: "text",
-        state: "text",
-        postcode: "number"
-    }
-}
-
 const titles = [
     {value: "mr", label: "Mr."},
     {value: "ms", label: "Ms."},
@@ -45,21 +32,6 @@ const parserFunction = (value: string) => value.replace(/\$\s?|(,*)/g, '')
 const formatterFunction = (value: string) => !Number.isNaN(parseFloat(value))
     ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
     : '$ '
-
-const initialValues = {
-    title: '',
-    surname: '',
-    firstName: '',
-    middleName: '',
-    dateOfBirth: '',
-    taxFileNumber: '',
-    address: '',
-    state: '',
-    postCode: '',
-    doYouOwnThisProperty: 'no',
-    marketValue: 0,
-    loan: 0
-};
 
 
 export default function CustomerDetails() {
