@@ -1,4 +1,4 @@
-import {Box, Button, Flex, Group, Input, NativeSelect, NumberInput, PinInput, Stack, Text} from "@mantine/core";
+import {Button, Flex, Group, Input, NativeSelect, NumberInput, PinInput, Stack, Text} from "@mantine/core";
 import {IMaskInput} from "react-imask";
 import {Controller, FieldValues, useForm} from "react-hook-form";
 import MySelect from "./MySelect";
@@ -40,13 +40,13 @@ export default function CustomerDetails() {
 
     return (
         <>
-            <Box sx={{
-                position: "fixed",
-                left: "4em",
-                top: "4em"
-            }}>
-                <Button onClick={handleSubmit(onSubmit)}>TEST</Button>
-            </Box>
+            {/*<Box sx={{*/}
+            {/*    position: "fixed",*/}
+            {/*    left: "4em",*/}
+            {/*    top: "4em"*/}
+            {/*}}>*/}
+            {/*    <Button onClick={handleSubmit(onSubmit)}>TEST</Button>*/}
+            {/*</Box>*/}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack>
                     <Group>
@@ -235,6 +235,7 @@ export default function CustomerDetails() {
                             </Input.Wrapper>
                         )}
                     />
+                    <Button mt="2em" onClick={handleSubmit(onSubmit)}>Submit</Button>
                 </Stack>
             </form>
         </>
