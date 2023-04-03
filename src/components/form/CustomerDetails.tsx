@@ -6,8 +6,12 @@ import MyTextInput from "./MyTextInput";
 import MyDatePicker from "./MyDatePicker";
 import CustomTitle from "./CustomTitle";
 import YesOrNoRadio from "./YesOrNoRadio";
-import HiddenComponent from "./HiddenComponent";
+import HiddenComponent from "../HiddenComponent";
 import MyNumberInput from "./MyNumberInput";
+import {useState} from "react";
+import {PDFDownloadLink} from "@react-pdf/renderer";
+import PDFDocument from "../pdf/PDFDocument";
+import {FormInterface} from "../interfaces/FormInterface";
 
 const titles = [
     {value: "mr", label: "Mr."},
@@ -33,10 +37,39 @@ const formatterFunction = (value: string) => !Number.isNaN(parseFloat(value))
     ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
     : '$ '
 
+const initialValue: FormInterface = {
+    address: "",
+    anotherProperty: "",
+    bestInterest: "",
+    correctLoanStructure: "",
+    customTitle: "",
+    dateOfBirth: "",
+    email: "",
+    firstName: "",
+    freeLoanReview: "",
+    loanFix: "",
+    middleName: "",
+    mobileNumber: "",
+    ownProperty: "",
+    postCode: 0,
+    postalAddress: "",
+    postalPostCode: 0,
+    postalState: "",
+    state: "",
+    surname: "",
+    taxFileNumber: "",
+    title: ""
+}
 
 export default function CustomerDetails() {
     const {register, handleSubmit, control, unregister, watch} = useForm()
-    const onSubmit = (value: FieldValues) => console.log(value)
+    const [isFormFilledOut, setIsFormFilledOut] = useState(false);
+    const [formData, setFormData] = useState<FormInterface>(initialValue);
+    const onSubmit = (value: FieldValues) => {
+        console.log(value)
+        setIsFormFilledOut(true)
+        setFormData(value as FormInterface)
+    }
 
     return (
         <>
@@ -236,6 +269,17 @@ export default function CustomerDetails() {
                         )}
                     />
                     <Button mt="2em" onClick={handleSubmit(onSubmit)}>Submit</Button>
+                    {isFormFilledOut && (
+                        <PDFDownloadLink document={<PDFDocument formResponse={formData}/>} fileName="form">
+                            {({ loading }) => (
+                                loading ? (
+                                    <Button>Loading</Button>
+                                ) : (
+                                    <Button>Download PDF</Button>
+                                )
+                            )}
+                        </PDFDownloadLink>
+                    )}
                 </Stack>
             </form>
         </>
