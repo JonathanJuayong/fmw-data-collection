@@ -1,6 +1,6 @@
 import {Box, MantineProvider} from '@mantine/core';
 import Layout from "./components/Layout";
-import FormCollection from "./components/FormCollection";
+import FormCollection from "./components/form/FormCollection";
 
 export default function App() {
     return (
